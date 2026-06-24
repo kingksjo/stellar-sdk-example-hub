@@ -1,42 +1,55 @@
 # ISSUE-001: Implement Path Payments Example (Horizon)
 
-**EPIC:** 1 — SDK Examples
-**Labels:** `enhancement`, `good first issue`, `epic-examples`
-**Difficulty:** easy
+**EPIC:** SDK Examples
+
+**Labels:** enhancement, good first issue, easy, wave
+
+**Difficulty:** Easy
 
 ## Description
 
-Stellar supports path payments (sending one asset and having the recipient receive a different asset through DEX paths). We need a runnable script demonstrating how to construct, simulate, and submit a path payment operation using the SDK.
+Stellar supports path payments, allowing a sender to pay with one asset while the recipient receives another through available DEX liquidity paths.
+
+Implement a runnable SDK example demonstrating how to discover available paths, construct a path payment transaction, and submit it successfully using Horizon.
 
 ## Tasks
 
-- [ ] Create `src/examples/06-path-payment.ts`
-- [ ] Incorporate `Operation.pathPaymentStrictSend` or `Operation.pathPaymentStrictReceive`
-- [ ] Connect to Horizon, find path options, and execute the payment
-- [ ] Print exchange rate and transaction hash on success
-- [ ] Register the new example in the runner catalog
+* [ ] Create `src/examples/06-path-payment.ts`
+* [ ] Implement either `Operation.pathPaymentStrictSend` or `Operation.pathPaymentStrictReceive`
+* [ ] Query Horizon for available payment paths
+* [ ] Execute the path payment transaction
+* [ ] Display exchange rate information
+* [ ] Display transaction hash upon successful submission
+* [ ] Register the example in the runner catalog
+* [ ] Add documentation explaining how path payments work
 
 ## Acceptance Criteria
 
-- Executing `npm run run-example 06-path-payment` executes the path payment script
-- Thorough inline documentation explains the concept of paths and limits
-## References
-
-- Stellar Path Payments Documentation
-- Relevant SDK Documentation
+* Running `npm run run-example 06-path-payment` executes successfully
+* Example runs against Stellar Testnet
+* Transaction hash is displayed after successful execution
+* Exchange rate information is displayed
+* Inline documentation explains path payments, liquidity routes, and limits
+* Example is discoverable through the example runner
 
 ## Files Likely Affected
 
-- src/examples/06-path-payment.ts
-- src/runner/catalog.ts
-- README.md
+* `src/examples/06-path-payment.ts`
+* `src/runner/catalog.ts`
+* `README.md`
 
 ## Testing Requirements
 
-- Example executes successfully on Stellar testnet
-- Transaction hash is displayed
-- Exchange rate information is displayed
+* Example executes successfully on Stellar Testnet
+* Transaction hash is displayed
+* Exchange rate information is displayed
+* Example passes CI validation
+
+## References
+
+* Stellar Path Payments Documentation
+* Stellar JavaScript SDK Documentation
 
 ## Estimated Effort
 
-3-5 hours
+3–5 hours
