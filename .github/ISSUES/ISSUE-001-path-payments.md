@@ -20,3 +20,23 @@ Stellar supports path payments (sending one asset and having the recipient recei
 
 - Executing `npm run run-example 06-path-payment` executes the path payment script
 - Thorough inline documentation explains the concept of paths and limits
+## References
+
+- Stellar Path Payments Documentation
+- Relevant SDK Documentation
+
+## Files Likely Affected
+
+- src/examples/06-path-payment.ts
+- src/runner/catalog.ts
+- README.md
+
+## Testing Requirements
+
+- Example executes successfully on Stellar testnet
+- Transaction hash is displayed
+- Exchange rate information is displayed
+
+## Estimated Effort
+
+3-5 hours
