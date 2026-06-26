@@ -16,9 +16,19 @@ We organize examples sequentially:
 3. **`03-create-trustline`**: Setting up trustlines to receive non-native assets.
 4. **`04-multisig`**: Multi-signature setup, changing thresholds, and gathering signatures.
 5. **`05-soroban-invoke`**: Simulating and invoking smart contract methods.
-6. **`12-asset-issuance`**: Custom asset issuance and locking the issuer account weight to 0.
-7. **`17-offline-signing`**: Building unsigned transaction XDR, signing it offline, and verifying.
-8. **`18-soroban-errors`**: Intentionally triggering and parsing Soroban RPC and simulation errors.
+6. **`07-claimable-balances`**: Creating a claimable balance and claiming it with predicates.
+7. **`09-fee-bump`**: Wrapping a signed transaction in a sponsor-paid fee-bump transaction.
+8. **`12-asset-issuance`**: Custom asset issuance and locking the issuer account weight to 0.
+9. **`14-time-locked-escrow`**: Demonstrating a transaction that only becomes valid inside a time window.
+10. **`16-batched-operations`**: Bundling multiple payment operations into one atomic transaction.
+11. **`17-offline-signing`**: Building unsigned transaction XDR, signing it offline, and verifying.
+12. **`18-soroban-errors`**: Intentionally triggering and parsing Soroban RPC and simulation errors.
+6. **`08-liquidity-pools`**: Liquidity pool identification, trustline setup, deposit, and withdrawal.
+7. **`11-sponsored-reserves`**: Sponsorship lifecycle with sponsored reserves and verification.
+8. **`12-asset-issuance`**: Custom asset issuance and locking the issuer account weight to 0.
+9. **`17-offline-signing`**: Building unsigned transaction XDR, signing it offline, and verifying.
+10. **`18-soroban-errors`**: Intentionally triggering and parsing Soroban RPC and simulation errors.
+11. **`19-horizon-streaming`**: Subscribing to live Horizon Testnet payment events over Server-Sent Events.
 
 ## Installation
 
@@ -37,18 +47,103 @@ npm install
 We include a central runner to execute examples interactively.
 
 ### Interactive Mode
+
 Run the driver to select and run an example from the list:
+
 ```bash
 npm run dev
 ```
 
 ### Direct Run
+
 Run a specific example directly by passing its suffix name:
+
 ```bash
 npm run run-example 01-create-account
 ```
 
-*Note: You can configure custom environment variables in a local `.env` file (e.g. `HORIZON_URL`, `SOROBAN_RPC_URL`).*
+Stream live Horizon Testnet payment events:
+
+```bash
+npm run run-example 19-horizon-streaming
+```
+
+The streaming example listens from cursor `now`, prints formatted payment-like
+operations as they arrive, logs stream errors, and closes cleanly when you press
+Ctrl+C. For quick sampling, set `STREAM_DURATION_SECONDS=10` or
+`STREAM_MAX_EVENTS=3`.
+
+_Note: You can configure custom environment variables in a local `.env` file (e.g. `HORIZON_URL`, `SOROBAN_RPC_URL`)._
+
+## Automated Example Validation
+
+The repository includes an automated validation framework that discovers runnable examples and validates them in isolated subprocesses.
+
+### Architecture
+
+- Discovery: `src/validation/discovery.ts` recursively finds files under `src/examples` that match the configured file pattern.
+- Configuration: `src/validation/validation.config.json` defines discovery rules, timeout behavior, and exclusions.
+- Execution: `src/validation/executor.ts` runs each example in its own Node.js process and captures stdout, stderr, duration, and runtime failures.
+- Reporting: `src/validation/reporter.ts` builds a reusable summary object and renders CI-friendly report output.
+- Entrypoint: `src/validate-examples.ts` is the CLI command used locally and in GitHub Actions.
+
+### Run Locally
+
+Run validation with CI-safe exclusions applied:
+
+```bash
+npm run validate:examples
+```
+
+Run all discovered examples (including excluded ones):
+
+```bash
+npm run validate:examples:all
+```
+
+Target specific examples:
+
+```bash
+npm run validate:examples -- --only 01-create-account,02-payment
+```
+
+Use a custom config file:
+
+```bash
+npm run validate:examples -- --config path/to/validation.config.json
+```
+
+### Exclusion Mechanism
+
+Examples that require external credentials, user interaction, or unavailable services can be excluded via config:
+
+```json
+{
+	"exclusions": [
+		{
+			"match": "05-soroban-invoke",
+			"reason": "Requires Soroban RPC availability and deployed contracts"
+		},
+		{
+			"match": "18-*",
+			"reason": "Requires external service behavior that is not deterministic in CI"
+		}
+	]
+}
+```
+
+`match` supports `*` wildcard patterns and is evaluated against the example name (without `.ts`).
+
+### CI Integration
+
+The CI workflow runs `npm run validate:examples` on every push and pull request. The step fails automatically when validation reports one or more failed examples.
+
+### Adding New Examples
+
+When you add a new file in `src/examples` that matches the configured file pattern, it is discovered automatically by the validation framework.
+
+- If it can run in CI, no extra validation registration is required.
+- If it cannot run in CI, add an exclusion rule in `src/validation/validation.config.json` with a clear reason.
 
 ## Contributing
 
