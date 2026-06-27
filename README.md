@@ -32,6 +32,7 @@ We organize examples sequentially:
 12. **`22-manage-buy-offer`**: Creating, modifying, and deleting buy offers on the Stellar SDEX using `manageBuyOffer`.
 13. **`23-manage-data-entries`**: Creating, updating, querying, and removing account data entries using `manageData`.
 14. **`24-create-passive-sell-offer`**: Creating a passive sell offer on the SDEX for resting liquidity provisioning.
+15. **`25-account-flags`**: Viewing and modifying issuer account authorization flags (`AUTH_REQUIRED`, `AUTH_REVOCABLE`, `AUTH_IMMUTABLE`).
 
 ## Installation
 
